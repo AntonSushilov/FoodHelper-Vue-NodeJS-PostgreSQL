@@ -8,8 +8,29 @@ export const getAllTuple = (table, {orderByAsc = false, orderByDesc = false} = {
   return query
 }
 
-export const getOneTuple = (table, id) => {
-  const query = `SELECT * from "${table}" WHERE id = ${id}`
+export const getOneTuple = (table, where) => {
+  const query = `SELECT * from "${table}" ${where ? "WHERE " + Object.keys(where).map((key) => {
+    const type = typeof(where[key])
+    let value = ""
+    switch(type){
+      case "string":
+        value = `'${where[key]}'`
+        break
+      case "number":
+        value = `${where[key]}`
+        break
+      case "bigint":
+        value = `${where[key]}`
+        break
+      // case "boolean":
+      // case "symbol":
+      // case "undefined":
+      // case "object":
+      // case "function":
+    }
+    
+    return `${key} = ${value}` 
+  }).join(", ") : ""}`
   return query
 }
 
@@ -26,6 +47,3 @@ export const deleteTuple = (table, id) => {
   const query = `DELETE from "${table}" WHERE id = ${id}`
   return query
 }
-
-
-

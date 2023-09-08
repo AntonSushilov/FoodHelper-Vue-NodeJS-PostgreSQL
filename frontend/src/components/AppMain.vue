@@ -42,6 +42,7 @@ export default {
 </script>
 <style scoped>
 .main {
+  padding-top: 12px;
   overflow-y: auto;
   scrollbar-gutter: stable both-edges;
   grid-area: main;
@@ -50,12 +51,12 @@ export default {
   grid-template-rows: 1fr;
   grid-template-areas:
     ". main-content .";
-  background-color: aqua;
+  /* background-color: aqua; */
 }
 
 .container {
   grid-area: main-content;
-  background-color: rgb(48, 230, 169);
+  /* background-color: rgb(48, 230, 169); */
   display: flex;
   flex-direction: column;
   gap: 10px;

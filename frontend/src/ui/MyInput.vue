@@ -4,7 +4,9 @@
   :type="type"
   :placeholder="placeholder"
   :disabled="disabled"
-  @change="callback($event)"
+  :required="required"
+  :value="modelValue"
+  @input="updateInput"
   />
 </template>
 <script>
@@ -14,7 +16,9 @@ export default {
     type: String,
     size: String,
     placeholder: String,
-    disabled: Boolean
+    disabled: Boolean,
+    required: Boolean,
+    modelValue: [String, Number]
   },
   data() {
     const classInput = `${this.size}`;
@@ -23,8 +27,9 @@ export default {
     }
   },
   methods: {
-    callback: function (e) {
-      this.$emit('click', e);
+    updateInput(e){
+      // console.log(this.required)
+      this.$emit('update:modelValue', e.target.value)
     }
   }
 }

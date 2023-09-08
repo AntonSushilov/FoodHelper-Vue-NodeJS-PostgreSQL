@@ -15,26 +15,44 @@
 
 
       <nav class="navbar">
-        navbar
+        <router-link to="/products">Продукты</router-link>
       </nav>
-      <div class="buttons">
-        <MyButton type="success" size="sm" @click="($event) =>redirect($event, 'Register')">Регистрация</MyButton>
-        <MyButton type="info" size="sm" @click="($event) =>redirect($event, 'Login')">Вход</MyButton>
-      </div>
+      <!-- <div v-if="isAuth">Вы авторизованы</div> -->
+        <!-- <div v-else class="buttons"> -->
+        <div v-if="isLoggedIn" class="buttons">
+          <!-- <span>Logout</span> -->
+          <MyButton type="info" size="sm" @click="logout">Выход</MyButton>
+
+        </div>
+        <div v-else class="buttons">
+          <MyButton type="success" size="sm" @click="($event) => redirect($event, 'Register')">Регистрация</MyButton>
+          <MyButton type="info" size="sm" @click="($event) => redirect($event, 'Login')">Вход</MyButton>
+        </div>
+      
     </div>
   </header>
 </template>
 <script>
 import router from "@/router/router"
+
 export default {
   name: "AppHeader",
   components: {
 
   },
+  computed: {
+    isLoggedIn: function () { return this.$store.getters.isLoggedIn }
+  },
   methods: {
     redirect: (e, to) => {
       // this.$emit('click', e);
       router.push({ name: to })
+    },
+    logout: function () {
+      this.$store.dispatch('logout')
+        .then(() => {
+          this.$router.push({ name: "Login" })
+        })
     },
     click: (e) => {
       console.log('click')
@@ -50,7 +68,8 @@ export default {
   grid-template-rows: 100%;
   grid-template-areas:
     ". header .";
-  background-color: greenyellow;
+  box-shadow: 0px 10px 10px 0px rgba(34, 60, 80, 0.2);
+  /* background-color: greenyellow; */
 
 }
 
@@ -60,7 +79,7 @@ export default {
   display: flex;
   flex-direction: row;
   justify-content: space-between;
-  background-color: aliceblue;
+  /* background-color: aliceblue; */
   align-items: center;
 
 }
@@ -91,10 +110,11 @@ export default {
   font-size: 30px;
   font-weight: 900;
 }
-.buttons{
+
+.buttons {
   display: flex;
   flex-direction: row;
   gap: 10px;
+  width: 220px;
 }
-
 </style>

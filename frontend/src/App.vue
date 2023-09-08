@@ -19,6 +19,16 @@ export default {
     AppHeader,
     AppMain,
     AppFooter,
+  },
+  created() {
+    this.$http.interceptors.response.use(undefined, function (err) {
+      return new Promise(function (resolve, reject) {
+        if (err.status === 401 && err.config && !err.config.__isRetryRequest) {
+          this.$store.dispatch(logout)
+        }
+        throw err;
+      });
+    });
   }
 }
 </script>
@@ -46,7 +56,7 @@ export default {
     "header"
     "main"
     "footer";
-  background-color: rgb(231, 238, 194);
+  /* background-color: rgb(231, 238, 194); */
 }
 
 ::-webkit-scrollbar {

@@ -1,7 +1,7 @@
 <template lang="ru">
   <button class="btn"
   :class="class"
-  
+  :type="type"
   :disabled="disabled"
   @click="callback($event)"
   >
@@ -24,7 +24,7 @@ export default {
   },
   methods: {
     callback: function (e) {
-      this.$emit('click', e);
+      this.$emit('onclick', e);
     }
   }
 }

@@ -9,12 +9,16 @@ class UserController {
       let newUser
       const { password } = req.body
       if (password) {
-        const hashPass = password && hash(password)
+        const hashPass = hash(password)
         newUser = await db.query(addTuple("user", { ...req.body, password: hashPass }))
       } else {
         newUser = await db.query(addTuple("user", req.body))
       }
-      res.json(newUser.rows[0])
+      res.json({
+        success: true,
+        message: "Пользователь создан успешно!",
+        user: newUser.rows[0]
+      })
     } catch (error) {
       res.json(error)
 
@@ -23,23 +27,34 @@ class UserController {
   async getAllUsers(req, res) {
     try {
       const users = await db.query(getAllTuple("user", { "orderByAsc": true }))
-      res.json(users.rows)
+      res.json({
+        success: true,
+        message: "Success",
+        usersList: users.rows
+      })
     } catch (error) {
     }
   }
   async getOneUser(req, res) {
     try {
       const id = req.params.id
-      const user = await db.query(getOneTuple("user", id))
-      res.json(user.rows[0])
-
+      const user = await db.query(getOneTuple("user", {"id": Number(id)}))
+      res.json({
+        success: true,
+        message: "Success",
+        user: user.rows[0]
+      })
     } catch (error) {
     }
   }
   async updateUser(req, res) {
     try {
       const newUser = await db.query(updateTuple("user", req.body))
-      res.json(newUser.rows[0])
+      res.json({
+        success: true,
+        message: "Пользователь обновлен успешно!",
+        user: newUser.rows[0]
+      })
     } catch (error) {
     }
   }
@@ -48,7 +63,11 @@ class UserController {
       const id = req.params.id
       const user = await db.query(deleteTuple("user", id))
       // res.json(user.rows[0])
-      res.json({id: id})
+      res.json({
+        success: true,
+        message: "Пользователь удален успешно!",
+        user: {id: id}
+      })
     } catch (error) {
     }
   }
