@@ -6,6 +6,7 @@ import RegisterPage from "@/pages/RegisterPage"
 import LoginPage from "@/pages/LoginPage"
 import Secure from "@/components/Secure"
 import Products from "@/components/Products/Products"
+import Dishes from "@/components/Dishes/Dishes"
 
 const routes = [
   {
@@ -35,6 +36,11 @@ const routes = [
     path: '/products',
     name: "Products",
     component: Products
+  },
+  {
+    path: '/Dishes',
+    name: "Dishes",
+    component: Dishes
   },
 ]
 

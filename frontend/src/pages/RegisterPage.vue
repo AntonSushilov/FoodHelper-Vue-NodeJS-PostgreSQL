@@ -6,10 +6,10 @@
     </div>
     <form class="register__form" id="register_form">
       <h1>Регистрация</h1>
-      <MyInput type="text" required v-model="email" placeholder="Введите почту..."/>
-      <MyInput type="password" required v-model="password" placeholder="Введите пароль..."/>
-      <MyInput type="password" required v-model="password_confirmation" placeholder="Повторите пароль..."/>
-      <MyButton type="submit" :onclick="register">Зарегистрироваться</MyButton>
+      <MyInput type="text" required v-model="email" placeholder="Введите почту..." autocomplete="on"/>
+      <MyInput type="password" required v-model="password" placeholder="Введите пароль..." autocomplete="off"/>
+      <MyInput type="password" required v-model="password_confirmation" placeholder="Повторите пароль..." autocomplete="off"/>
+      <MyButton type="success" typeButton="submit" :onclick="register">Зарегистрироваться</MyButton>
       <p>У Вас уже есть аккаунт? <router-link to="/login">Вход</router-link></p>
     </form>
     </div>
@@ -23,7 +23,6 @@ export default {
   name: "RegisterPage",
   data() {
     return {
-      name: "",
       email: "",
       password: "",
       password_confirmation: "",
@@ -33,15 +32,20 @@ export default {
   methods: {
     register(e) {
       e.preventDefault()
-      let data = {
-        name: this.name,
-        email: this.email,
-        password: this.password,
-        is_admin: this.is_admin
+      let form = document.getElementById("register_form")
+      let isFromValid = form.checkValidity();
+      if (!isFromValid) {
+        form.reportValidity();
+      } else {
+        let data = {
+          email: this.email,
+          password: this.password,
+          // is_admin: this.is_admin
+        }
+        this.$store.dispatch('register', data)
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
       }
-      this.$store.dispatch('register', data)
-        .then(() => this.$router.push('/'))
-        .catch(err => console.log(err))
     },
 
     // register(e) {

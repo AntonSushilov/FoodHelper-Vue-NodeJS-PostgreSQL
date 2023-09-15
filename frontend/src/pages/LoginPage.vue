@@ -2,10 +2,10 @@
   <div class="login">
     <div class="content">
       
-    <form class="login__form">
+    <form class="login__form" id="login_form">
       <h1>Вход</h1>
-      <MyInput v-model="email" type="text" placeholder="Введите почту..."/>
-      <MyInput v-model="password" type="password" placeholder="Введите пароль..."/>
+      <MyInput v-model="email" required type="text" placeholder="Введите почту..." autocomplete="on"/>
+      <MyInput v-model="password" required type="password" placeholder="Введите пароль..." autocomplete="on"/>
       <MyButton type="success" :onclick="login">Вход</MyButton>
       <p>Вы еще не зарегистрированы на сайте? <router-link to="/register">Регистрация</router-link></p>
     </form>
@@ -26,20 +26,19 @@ export default {
     }
   },
   methods: {
-    click(e) {
-      e.preventDefault();
-      console.log(e)
-      console.log(this.email)
-      console.log(this.password)
-
-    },
     login(e) {
       e.preventDefault();
-      const email = this.email
-      const password = this.password
-      this.$store.dispatch('login', { email, password })
-        .then(() => this.$router.push('/'))
-        .catch(err => console.log(err))
+      let form = document.getElementById("login_form")
+      let isFromValid = form.checkValidity();
+      if (!isFromValid) {
+        form.reportValidity();
+      } else {
+        const email = this.email
+        const password = this.password
+        this.$store.dispatch('login', { email, password })
+          .then(() => this.$router.push('/'))
+          .catch(err => console.log(err))
+      }
     }
   }
 }

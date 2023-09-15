@@ -1,18 +1,14 @@
 <template lang="ru">
-  <!-- <input class="input"
-  :class="class"
-  :type="type"
-  :placeholder="placeholder"
-  :disabled="disabled"
-  @change="callback($event)"
-  /> -->
   <textarea 
   :class="class"
   :type="type"
   :placeholder="placeholder"
   :disabled="disabled"
+  :required="required"
   :rows="rows"
-  @change="callback($event)"></textarea>
+  :value="modelValue"
+  @input="updateInput"
+></textarea>
 </template>
 <script>
 export default {
@@ -23,8 +19,9 @@ export default {
     placeholder: String,
     rows: Number,
     disabled: Boolean,
-    resize: String
-
+    required: Boolean,
+    resize: String,
+    modelValue: [String]
   },
   data() {
     let classInput = `${this.size}`;
@@ -33,7 +30,6 @@ export default {
     }else if(this.resize === "vertical"){
       classInput = `${classInput} resize-vertical`
     }
-    console.log(classInput, this.resize)
     return {
       class: classInput
     }
@@ -41,6 +37,9 @@ export default {
   methods: {
     callback: function (e) {
       this.$emit('click', e);
+    },
+    updateInput(e){
+      this.$emit('update:modelValue', e.target.value)
     }
   }
 }

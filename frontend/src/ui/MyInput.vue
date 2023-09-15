@@ -28,7 +28,6 @@ export default {
   },
   methods: {
     updateInput(e){
-      // console.log(this.required)
       this.$emit('update:modelValue', e.target.value)
     }
   }

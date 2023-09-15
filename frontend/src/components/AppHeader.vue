@@ -16,6 +16,7 @@
 
       <nav class="navbar">
         <router-link to="/products">Продукты</router-link>
+        <router-link to="/dishes">Блюда</router-link>
       </nav>
       <!-- <div v-if="isAuth">Вы авторизованы</div> -->
         <!-- <div v-else class="buttons"> -->
@@ -116,5 +117,12 @@ export default {
   flex-direction: row;
   gap: 10px;
   width: 220px;
+}
+
+.navbar{
+  display: flex;
+  flex-direction: row;
+  justify-content: center;
+  gap: 24px;
 }
 </style>

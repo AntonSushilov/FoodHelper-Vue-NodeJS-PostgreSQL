@@ -1,7 +1,7 @@
 <template lang="ru">
   <button class="btn"
   :class="class"
-  :type="type"
+  :typeButton="typeButton"
   :disabled="disabled"
   @click="callback($event)"
   >
@@ -12,6 +12,7 @@
 export default {
   name: "MyButton",
   props: {
+    typeButton: String,
     type: String,
     size: String,
     disabled: Boolean

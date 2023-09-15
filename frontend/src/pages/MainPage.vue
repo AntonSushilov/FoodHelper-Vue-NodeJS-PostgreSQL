@@ -1,7 +1,8 @@
 <template lang="">
   <div>
-    <h1>Добро пожаловать на сайт FoodHelper {{ count }}</h1>
-    {{ info }}
+    <h1>Добро пожаловать на сайт FoodHelper</h1>
+    <!-- {{ count }} -->
+    <!-- {{ info }} -->
   </div>
 </template>
 <script>

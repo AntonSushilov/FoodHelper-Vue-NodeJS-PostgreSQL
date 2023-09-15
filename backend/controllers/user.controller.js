@@ -1,23 +1,29 @@
 import db from "../db.js"
 import { validationResult } from "express-validator"
 import { hash } from "../utils/bcrypt.js"
-import { addTuple, getAllTuple, getOneTuple, updateTuple, deleteTuple } from "../utils/db_query.js"
+import { PrismaClient } from '@prisma/client'
+
+const prisma = new PrismaClient()
 
 class UserController {
   async createUser(req, res) {
     try {
-      let newUser
       const { password } = req.body
-      if (password) {
-        const hashPass = hash(password)
-        newUser = await db.query(addTuple("user", { ...req.body, password: hashPass }))
-      } else {
-        newUser = await db.query(addTuple("user", req.body))
+      if (!password) {
+        res.json({
+          success: false,
+          message: "Пустой пароль!",
+        })
+        return
       }
+      const hashPass = hash(password)
+      const newUser = await prisma.user.create({
+        data: { ...req.body, password: hashPass }
+      })
       res.json({
         success: true,
         message: "Пользователь создан успешно!",
-        user: newUser.rows[0]
+        user: newUser
       })
     } catch (error) {
       res.json(error)
@@ -26,11 +32,15 @@ class UserController {
   }
   async getAllUsers(req, res) {
     try {
-      const users = await db.query(getAllTuple("user", { "orderByAsc": true }))
+      const users = await prisma.user.findMany({
+        orderBy: {
+          id: "asc"
+        },
+      })
       res.json({
         success: true,
         message: "Success",
-        usersList: users.rows
+        usersList: users
       })
     } catch (error) {
     }
@@ -38,22 +48,42 @@ class UserController {
   async getOneUser(req, res) {
     try {
       const id = req.params.id
-      const user = await db.query(getOneTuple("user", {"id": Number(id)}))
-      res.json({
-        success: true,
-        message: "Success",
-        user: user.rows[0]
+      const user = await prisma.user.findUnique({
+        where: {
+          id: Number(id)
+        },
       })
+      if (user) {
+        res.json({
+          success: true,
+          message: "Пользователь найден!",
+          user: user
+        })
+        return
+      } else {
+        res.json({
+          success: false,
+          message: "Пользователь не найден!",
+        })
+        return
+      }
+
     } catch (error) {
     }
   }
   async updateUser(req, res) {
     try {
-      const newUser = await db.query(updateTuple("user", req.body))
+      const { id, ...updateData } = req.body
+      const updateUser = await prisma.user.update({
+        where: {
+          id: Number(id),
+        },
+        data: { ...updateData },
+      })
       res.json({
         success: true,
         message: "Пользователь обновлен успешно!",
-        user: newUser.rows[0]
+        user: updateUser
       })
     } catch (error) {
     }
@@ -61,12 +91,15 @@ class UserController {
   async deleteUser(req, res) {
     try {
       const id = req.params.id
-      const user = await db.query(deleteTuple("user", id))
-      // res.json(user.rows[0])
+      const deleteUser = await prisma.user.delete({
+        where: {
+          id: Number(id),
+        },
+      })
       res.json({
         success: true,
         message: "Пользователь удален успешно!",
-        user: {id: id}
+        user: deleteUser
       })
     } catch (error) {
     }

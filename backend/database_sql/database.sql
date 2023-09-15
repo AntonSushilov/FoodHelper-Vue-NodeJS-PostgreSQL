@@ -1,8 +1,12 @@
 -- SQLBook: Code
 -- Active: 1687179359586@@127.0.0.1@5432@foodhelper_bd
 -- SQLBook: Code
-DROP TABLE product
+-- Удалить таблицы
+DROP TABLE dish_product;
+DROP TABLE dish;
+DROP TABLE "user";
 -- SQLBook: Code
+-- Добавить столбик в таблицу
 ALTER TABLE product ADD image_name text
 -- SQLBook: Code
 create TABLE "user"(
@@ -37,13 +41,16 @@ create TABLE dish(
   recipe text
 )
 -- SQLBook: Code
+-- Active: 1687179359586@@127.0.0.1@5432@foodhelper_bd
 
 create TABLE dish_product(
   id SERIAL PRIMARY KEY,
-  author_id INTEGER,
-  FOREIGN KEY (author_id) REFERENCES "user" (id),
+  dish_id INTEGER,
+  FOREIGN KEY (dish_id) REFERENCES dish (id),
   product_id INTEGER,
-  FOREIGN KEY (product_id) REFERENCES product (id)
+  FOREIGN KEY (product_id) REFERENCES product (id),
+  count DECIMAL,
+  unit VARCHAR(10)
 )
 -- SQLBook: Code
 
@@ -61,3 +68,14 @@ INSERT INTO "user" (email, password, name, surname) VALUES ('email', 'password',
 
 SELECT * from "user" WHERE email = 'email123@mail.ru'
 
+
+-- SQLBook: Code
+-- Active: 1687179359586@@127.0.0.1@5432@foodhelper_bd
+TRUNCATE TABLE "user"
+-- SQLBook: Code
+select 
+tab3.title as title_product, 
+tab3.info as info_product
+from dish as tab1
+LEFT JOIN dish_product as tab2 ON tab1.id = tab2.dish_id
+LEFT JOIN product as tab3 ON tab2.product_id = tab3.id;
